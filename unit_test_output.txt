@@ -1,0 +1,297 @@
+
+"""
+Created on Wed Jul 22 19:04:49 2020
+5.9 Assignment: Module 5 Live Session Exercise: Testing Activity
+Yibo Wang (yw9et)
+Ruoyu Zhang (rz3jr)
+KEYU CHEN (km5ar)
+Yusheng Jiang (yj3tp)
+Hyunglok Kim (hk5kp)
+"""
+
+
+
+## Unit test
+import unittest
+from USGS_FlowData_utils import *
+import datetime
+import time
+import numpy as np
+
+class USGS_DataRetriever_Test(unittest.TestCase):
+    def test__init__id(self):
+        data1 = USGS_Gage_DataRetriever('01654000')
+        self.assertEqual(len(data1.id),8)
+
+if __name__ == '__main__':
+    unittest.main()         
+
+class USGS_DataRetriever_Test(unittest.TestCase):
+    def test__init__vars_info(self):
+        data1 = USGS_Gage_DataRetriever('01654000')
+        self.assertEqual(len(data1.vars_info['Variables'][0]['variableID']),5)
+
+if __name__ == '__main__':
+    unittest.main()   
+
+class USGS_DataRetriever_Test(unittest.TestCase):
+    def test__init__vars_info2(self):
+        data1 = USGS_Gage_DataRetriever('01654000')
+        self.assertEqual(data1.vars_info['Variables'][1]['variableName'],'Discharge(Mean)')
+
+if __name__ == '__main__':
+    unittest.main()   
+
+
+class USGS_DataRetriever_Test(unittest.TestCase):
+    def test_getStatistics(self):
+        data1 = USGS_Gage_DataRetriever('01654000')
+        test_Stat = data1.getStatistics()
+        len(test_Stat)
+        self.assertEqual(type(test_Stat),dict)
+
+if __name__ == '__main__':
+    unittest.main()  
+
+
+
+class USGS_DataRetriever_Test(unittest.TestCase):
+    def test_getStatistics(self):
+        data1 = USGS_Gage_DataRetriever('01654000')
+        test_Stat = data1.getStatistics()
+        self.assertEqual(len(test_Stat),5)
+if __name__ == '__main__':
+    unittest.main()  
+
+
+
+class USGS_DataRetriever_Test(unittest.TestCase):
+    def test_getUnit(self):
+        self.assertEqual(data1.getUnit(),'cms')
+
+class USGS_DataRetriever_Test(unittest.TestCase):
+    def test_getDailyDischarge(self):
+        test5 = USGS_Gage_DataRetriever("01656120")
+        df5 = test5.getDailyDischarge()
+        col1 = type(datetime.datetime.strptime(df5["Date"][0],'%Y-%m-%d'))
+        col2 = type(float(df5["Flow (cms)"][0]))
+        col_list = [col1, col2]
+        print(col_list)
+        self.assertEqual(col_list, [datetime.datetime, float]) 
+
+if __name__ == '__main__':
+    unittest.main()  
+
+
+
+class USGS_DataRetriever_Test(unittest.TestCase):
+    
+    def test_getVarsMetaData(self):
+        test1 = USGS_Gage("01656120")
+        df = test1.getVarsMetaData()
+        
+        col1 = type(df["Variable Name"][0])
+        col2 = type(int(df["Variable ID"][0]))
+        #col3 = type(df["Start Date"][0])
+        #col4 = type(df["End Date"][0])
+        col3 = type(datetime.datetime.strptime(df["Start Date"][0],'%Y-%m-%d'))
+        col4 = type(datetime.datetime.strptime(df["End Date"][0],'%Y-%m-%d'))
+        col_list = [col1, col2, col3, col4]
+        print(col_list)
+        self.assertEqual(col_list, [str, int, datetime.datetime, datetime.datetime]) 
+
+if __name__ == '__main__':
+    unittest.main()  
+
+
+class USGS_DataRetriever_Test(unittest.TestCase):
+    
+    def test_getGeoMetaData(self):
+        test4 = USGS_Gage_DataRetriever("01656120")
+        res = test4.getGeoMetaData()
+        ele1 = type(res['Coordiantes'])
+        ele2 = type(res['County'])
+        ele3 = type(int(res['CountyFIPS']))
+        ele4 = type(int(res['Gage']))
+        ele5 = type(res['State'])
+        ele_type_list = [ele1, ele2, ele3, ele4, ele5]
+        print(ele_type_list)
+        self.assertEqual(ele_type_list, [tuple, str, int, int, str]) 
+
+if __name__ == '__main__':
+    unittest.main()  
+
+
+
+class USGS_DataRetriever_Test(unittest.TestCase):        
+    def test_findLargestEvents(self):
+        test = USGS_Gage_DataRetriever("01656120")
+        test_1 = test.findLargestEvents(10)
+        self.assertEqual(len(test_1),10)
+
+if __name__ == '__main__':
+    unittest.main()
+---------------------------------------------------------------
+Retrieving MetaData for Discharge time period
+.----------------------------------------------------------
+USGS Gage 01654000 has following variables:
+    Temperature, water(Max.,Min.,Mean) from 2002-01-17 to 2020-07-31
+    Discharge(Mean) from 1947-10-01 to 2020-07-31
+    Specific cond at 25C(Max.,Min.,Mean) from 2002-01-17 to 2020-07-31
+    Dissolved oxygen(Max.,Min.,Mean,Med.) from 2015-02-05 to 2020-07-31
+    pH(Max.,Min.,Med.) from 2015-02-05 to 2020-07-31
+----------------------------------------------------------
+
+    Setting new dates from 1947-10-01 to 2020-07-31
+---------------------------------------------------------------
+Retrieving MetaData for Discharge time period
+
+----------------------------------------------------------------------
+Ran 1 test in 2.518s
+
+OK
+.----------------------------------------------------------
+USGS Gage 01654000 has following variables:
+    Temperature, water(Max.,Min.,Mean) from 2002-01-17 to 2020-07-31
+    Discharge(Mean) from 1947-10-01 to 2020-07-31
+    Specific cond at 25C(Max.,Min.,Mean) from 2002-01-17 to 2020-07-31
+    Dissolved oxygen(Max.,Min.,Mean,Med.) from 2015-02-05 to 2020-07-31
+    pH(Max.,Min.,Med.) from 2015-02-05 to 2020-07-31
+----------------------------------------------------------
+
+    Setting new dates from 1947-10-01 to 2020-07-31
+---------------------------------------------------------------
+Retrieving MetaData for Discharge time period
+
+----------------------------------------------------------------------
+Ran 1 test in 2.769s
+
+OK
+.----------------------------------------------------------
+USGS Gage 01654000 has following variables:
+    Temperature, water(Max.,Min.,Mean) from 2002-01-17 to 2020-07-31
+    Discharge(Mean) from 1947-10-01 to 2020-07-31
+    Specific cond at 25C(Max.,Min.,Mean) from 2002-01-17 to 2020-07-31
+    Dissolved oxygen(Max.,Min.,Mean,Med.) from 2015-02-05 to 2020-07-31
+    pH(Max.,Min.,Med.) from 2015-02-05 to 2020-07-31
+----------------------------------------------------------
+
+    Setting new dates from 1947-10-01 to 2020-07-31
+---------------------------------------------------------------
+Retrieving MetaData for Discharge time period
+
+----------------------------------------------------------------------
+Ran 1 test in 2.807s
+
+OK
+----------------------------------------------------------
+USGS Gage 01654000 has following variables:
+    Temperature, water(Max.,Min.,Mean) from 2002-01-17 to 2020-07-31
+    Discharge(Mean) from 1947-10-01 to 2020-07-31
+    Specific cond at 25C(Max.,Min.,Mean) from 2002-01-17 to 2020-07-31
+    Dissolved oxygen(Max.,Min.,Mean,Med.) from 2015-02-05 to 2020-07-31
+    pH(Max.,Min.,Med.) from 2015-02-05 to 2020-07-31
+----------------------------------------------------------
+
+    Setting new dates from 1947-10-01 to 2020-07-31
+.Summary of flow from 1947-10-01 to 2020-07-31
+    Min: 0.0
+    Median: 0.33980216386123197
+    Max: 101.9406491583696
+    Mean: 0.8433299503936476
+    Standard Deviation: 2.351093131406327 
+
+---------------------------------------------------------------
+Retrieving MetaData for Discharge time period
+
+----------------------------------------------------------------------
+Ran 1 test in 5.134s
+
+OK
+----------------------------------------------------------
+USGS Gage 01654000 has following variables:
+    Temperature, water(Max.,Min.,Mean) from 2002-01-17 to 2020-07-31
+    Discharge(Mean) from 1947-10-01 to 2020-07-31
+    Specific cond at 25C(Max.,Min.,Mean) from 2002-01-17 to 2020-07-31
+    Dissolved oxygen(Max.,Min.,Mean,Med.) from 2015-02-05 to 2020-07-31
+    pH(Max.,Min.,Med.) from 2015-02-05 to 2020-07-31
+----------------------------------------------------------
+
+    Setting new dates from 1947-10-01 to 2020-07-31
+.Summary of flow from 1947-10-01 to 2020-07-31
+    Min: 0.0
+    Median: 0.33980216386123197
+    Max: 101.9406491583696
+    Mean: 0.8433299503936476
+    Standard Deviation: 2.351093131406327 
+
+---------------------------------------------------------------
+Retrieving MetaData for Discharge time period
+
+----------------------------------------------------------------------
+Ran 1 test in 4.560s
+
+OK
+----------------------------------------------------------
+USGS Gage 01656120 has following variables:
+    Discharge(Mean) from 1996-10-01 to 2000-01-18
+    Suspnd sedmnt conc(Mean) from 1996-10-01 to 1999-12-31
+    Suspnd sedmnt disch(Mean) from 1996-10-01 to 1999-12-31
+----------------------------------------------------------
+
+    Setting new dates from 1996-10-01 to 2000-01-18
+.[<class 'datetime.datetime'>, <class 'float'>]
+
+----------------------------------------------------------------------
+Ran 1 test in 1.460s
+
+OK
+.----------------------------------------------------------
+USGS Gage 01656120 has following variables:
+    Discharge(Mean) from 1996-10-01 to 2000-01-18
+    Suspnd sedmnt conc(Mean) from 1996-10-01 to 1999-12-31
+    Suspnd sedmnt disch(Mean) from 1996-10-01 to 1999-12-31
+----------------------------------------------------------
+
+[<class 'str'>, <class 'int'>, <class 'datetime.datetime'>, <class 'datetime.datetime'>]
+---------------------------------------------------------------
+Retrieving MetaData for Discharge time period
+
+----------------------------------------------------------------------
+Ran 1 test in 0.832s
+
+OK
+----------------------------------------------------------
+USGS Gage 01656120 has following variables:
+    Discharge(Mean) from 1996-10-01 to 2000-01-18
+    Suspnd sedmnt conc(Mean) from 1996-10-01 to 1999-12-31
+    Suspnd sedmnt disch(Mean) from 1996-10-01 to 1999-12-31
+----------------------------------------------------------
+
+    Setting new dates from 1996-10-01 to 2000-01-18
+.---------------------------------------------------------------
+USGS Gage 01656120 locates at:
+    Prince county, VA. Site coordinates: (38.64150829, -77.5124873)
+
+---------------------------------------------------------------
+[<class 'tuple'>, <class 'str'>, <class 'int'>, <class 'int'>, <class 'str'>]
+---------------------------------------------------------------
+Retrieving MetaData for Discharge time period
+
+----------------------------------------------------------------------
+Ran 1 test in 1.765s
+
+OK
+----------------------------------------------------------
+USGS Gage 01656120 has following variables:
+    Discharge(Mean) from 1996-10-01 to 2000-01-18
+    Suspnd sedmnt conc(Mean) from 1996-10-01 to 1999-12-31
+    Suspnd sedmnt disch(Mean) from 1996-10-01 to 1999-12-31
+----------------------------------------------------------
+
+    Setting new dates from 1996-10-01 to 2000-01-18
+.
+----------------------------------------------------------------------
+Ran 1 test in 1.252s
+
+OK
